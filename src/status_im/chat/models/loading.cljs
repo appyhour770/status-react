@@ -38,6 +38,7 @@
               (filters/load-filters))))
 
 (fx/defn offload-all-messages
+  {:events [::offload-all-messages]}
   [{:keys [db] :as cofx}]
   (when-let [current-chat-id (:current-chat-id db)]
     {:db (update-in db [:chats current-chat-id]
@@ -150,6 +151,7 @@
                     (mailserver/load-gaps-fx current-chat-id)))))))
 
 (fx/defn load-messages
+  {:events [::load-messages]}
   [{:keys [db now] :as cofx}]
   (when-let [current-chat-id (:current-chat-id db)]
     (when-not (get-in db [:chats current-chat-id :messages-initialized?])

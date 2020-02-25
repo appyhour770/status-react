@@ -194,6 +194,11 @@
 ;;GENERAL ==============================================================================================================
 
 (re-frame/reg-sub
+ :multiaccount/logged-in?
+ (fn [db]
+   (multiaccounts.model/logged-in? {:db db})))
+
+(re-frame/reg-sub
  :connection-stats
  :<- [:desktop/desktop]
  (fn [desktop _]
