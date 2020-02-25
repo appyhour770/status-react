@@ -608,7 +608,8 @@
   (fx/merge cofx
             {:db (assoc-in db [:wallet/prepare-transaction :modal-opened?] true)}
             (bottom-sheet/hide-bottom-sheet)
-            (navigation/navigate-to-cofx :qr-scanner options)))
+            (navigation/navigate-to-cofx :modals {:screen :qr-scanner
+                                                  :params options})))
 
 (fx/defn view-only-qr-scanner-allowed
   {:events [:wallet.add-new/qr-scanner-allowed]}
@@ -644,7 +645,7 @@
   (fx/merge cofx
             {:db (assoc-in db [:wallet/prepare-transaction :modal-opened?] true)}
             (bottom-sheet/hide-bottom-sheet)
-            (navigation/navigate-to-cofx :contact-code nil)))
+            (navigation/navigate-to-cofx :modals {:screen :contact-code})))
 
 (fx/defn show-delete-account-confirmation
   {:events [:wallet.settings/show-delete-account-confirmation]}

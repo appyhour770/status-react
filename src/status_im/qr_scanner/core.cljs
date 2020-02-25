@@ -8,12 +8,13 @@
   [_ opts]
   {:request-permissions-fx
    {:permissions [:camera]
-    :on-allowed  #(re-frame/dispatch [:navigate-to :qr-scanner opts])
+    :on-allowed  #(re-frame/dispatch [:navigate-to :modals {:screen :qr-scanner
+                                                            :params opts}])
     :on-denied   (fn []
                    (utils/set-timeout
-                    #(utils/show-popup (i18n/label :t/error)
-                                       (i18n/label :t/camera-access-error))
-                    50))}})
+                     #(utils/show-popup (i18n/label :t/error)
+                                        (i18n/label :t/camera-access-error))
+                     50))}})
 
 (fx/defn set-qr-code
   [{:keys [db]} opts data]

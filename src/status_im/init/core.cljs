@@ -36,10 +36,10 @@
   (let [{{:multiaccounts/keys [multiaccounts] :as db} :db} cofx]
     (cond
       (empty? multiaccounts)
-      (navigation/navigate-to-cofx cofx :intro nil)
+      (navigation/navigate-to-cofx cofx :intro-stack {:screen :intro})
 
       logout?
-      (navigation/navigate-to-cofx cofx :multiaccounts nil)
+      (navigation/navigate-to-cofx cofx :intro-stack {:screen :multiaccounts})
 
       :else
       (let [{:keys [key-uid public-key photo-path name]} (first (#(sort-by :last-sign-in > %) (vals multiaccounts)))]

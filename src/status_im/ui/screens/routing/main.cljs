@@ -2,7 +2,7 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as re-frame]
             [status-im.ui.screens.profile.tribute-to-talk.views :as tr-to-talk]
-            [status-im.ui.screens.hardwallet.pin.views :as hardwallet.pin]
+            [status-im.utils.platform :as platform]
             [status-im.ui.screens.add-new.new-public-chat.view :as new-public-chat]
             [status-im.ui.screens.wallet.components.views :as wallet.components]
             [status-im.ui.screens.qr-scanner.views :as qr-scanner]
@@ -31,16 +31,16 @@
                 :header-mode        :none
                 :tab-bar            tabbar/tabbar}
    [{:name      :chat-stack
-     :no-wrap   true
+     :insets    {:top false}
      :component chat-stack/chat-stack}
     {:name      :browser-stack
-     :no-wrap   true
+     :insets    {:top false}
      :component browser-stack/browser-stack}
     {:name      :wallet-stack
-     :no-wrap   true
+     :insets    {:top false}
      :component wallet-stack/wallet-stack}
     {:name      :profile-stack
-     :no-wrap   true
+     :insets    {:top false}
      :component profile-stack/profile-stack}]])
 
 (defn modals []
@@ -54,8 +54,8 @@
      :component stickers/pack-modal}
     {:name      :tribute-learn-more
      :component tr-to-talk/learn-more}
-    {:name      :wallet-transactions-filter
-     :component wallet-transactions/filter-history}
+    ;; {:name      :wallet-transactions-filter
+    ;;  :component wallet-transactions/filter-history}
     {:name      :welcome
      :component home/welcome}
     {:name      :keycard-welcome
@@ -67,21 +67,22 @@
     {:name      :contact-code
      :component wallet.components/contact-code}
     {:name      :qr-scanner
-     :no-wrap   true
+     :insets    {:top false}
      :component qr-scanner/qr-scanner}]])
 
 (defn get-main-component [_]
   (fn []
-    [main-stack {:header-mode :none
-                 ;; :mode        :modal
-}
+    [main-stack (merge {:header-mode :none}
+                       (when platform/ios?
+                         {:mode :modal}))
      [(if @(re-frame/subscribe [:multiaccount/logged-in?])
         {:name      :tabs
-         :no-wrap   true
+         :insets    {:top false}
          :component tabs}
         {:name      :intro-stack
-         :no-wrap   true
+         :insets    {:top    false
+                     :bottom true}
          :component intro-login-stack/intro-stack})
       {:name      :modals
-       :no-wrap   true
+       :insets    {:top false}
        :component modals}]]))

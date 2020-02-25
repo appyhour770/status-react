@@ -1,5 +1,6 @@
 (ns status-im.ui.screens.routing.intro-login-stack
   (:require [status-im.utils.config :as config]
+            [re-frame.core :as re-frame]
             [status-im.ui.screens.multiaccounts.login.views :as login]
             [status-im.ui.screens.progress.views :as progress]
             [status-im.ui.screens.multiaccounts.views :as multiaccounts]
@@ -15,15 +16,14 @@
 (defonce stack (navigation/create-stack))
 
 (defn intro-stack []
-  [stack {:initial-route-name :intro
-          :header-mode        :none}
-   [{:name      :progress
-     :component progress/progress}
+  [stack {:header-mode :none}
+   [(if (empty? @(re-frame/subscribe [:multiaccounts/multiaccounts]))
+      {:name      :intro
+       :component intro/intro}
+      {:name      :multiaccounts
+       :component multiaccounts/multiaccounts})
     {:name      :login
      :component login/login}
-    {:name      :multiaccounts
-     :component multiaccounts/multiaccounts}
-
     ;; {:name :intro-wizard
     ;;          :component }
     ;; {:name :create-multiaccount
@@ -51,10 +51,6 @@
      :component intro/wizard-confirm-code}
     {:name      :recover-multiaccount-success
      :component intro/wizard-recovery-success}
-
-    {:name      :intro
-     :component intro/intro}
-
     {:name         :keycard-pairing
      :back-handler :noop
      :component    keycard/pairing}

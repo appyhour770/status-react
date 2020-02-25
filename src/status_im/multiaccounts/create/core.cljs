@@ -141,7 +141,7 @@
   [{:keys [db] :as cofx}]
   (fx/merge cofx
             {:db (dissoc db :intro-wizard)}
-            (navigation/navigate-to-cofx :welcome nil)))
+            (navigation/navigate-to-cofx :modals {:screen :welcome})))
 
 (fx/defn init-key-generation
   [{:keys [db] :as cofx}]

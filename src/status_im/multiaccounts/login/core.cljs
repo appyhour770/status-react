@@ -110,8 +110,8 @@
       (fx/merge cofx
                 {:db (update db :hardwallet dissoc :flow)}
                 (if (= :import flow)
-                  (navigation/navigate-to-cofx :keycard-recovery-success nil)
-                  (navigation/navigate-to-cofx :welcome nil))))))
+                  (navigation/navigate-to-cofx :intro-stack {:screen :keycard-recovery-success})
+                  (navigation/navigate-to-cofx :modals {:screen :welcome}))))))
 
 (fx/defn  initialize-dapp-permissions
   {:events [::initialize-dapp-permissions]}
@@ -250,7 +250,7 @@
 
 (fx/defn create-only-events
   [{:keys [db] :as cofx}]
-  (let [{:keys [multiaccount :multiaccount/accounts]} db]
+  (let [{:keys [:multiaccount/accounts]} db]
     (fx/merge cofx
               {:db (assoc db
                           ;;NOTE when login the filters are initialized twice
@@ -277,11 +277,11 @@
 (fx/defn multiaccount-login-success
   [{:keys [db now] :as cofx}]
   (let [{:keys [key-uid password save-password? creating?]} (:multiaccounts/login db)
-        recovering? (get-in db [:intro-wizard :recovering?])
-        login-only? (not (or creating?
-                             recovering?
-                             (keycard-setup? cofx)))
-        nodes nil]
+        recovering?                                         (get-in db [:intro-wizard :recovering?])
+        login-only?                                         (not (or creating?
+                                                                     recovering?
+                                                                     (keycard-setup? cofx)))
+        nodes                                               nil]
     (log/debug "[multiaccount] multiaccount-login-success"
                "login-only?" login-only?
                "recovering?" recovering?)
@@ -295,7 +295,7 @@
                                :multiaccount)
                        (assoc :logged-in-since now))
                ::json-rpc/call
-               [{:method "web3_clientVersion"
+               [{:method     "web3_clientVersion"
                  :on-success #(re-frame/dispatch [::initialize-web3-client-version %])}]}
               ;;FIXME
               (when nodes
@@ -304,10 +304,12 @@
                 (login-only-events key-uid password save-password?)
                 (create-only-events))
               (when recovering?
-                (navigation/navigate-to-cofx :home nil)))))
+                (navigation/navigate-to-cofx :tabs {:screen :chat-stack
+                                                    :params {:screen :home}})))))
 
 (fx/defn open-keycard-login
   [{:keys [db] :as cofx}]
+  ;; TODO: Get rid of navigation-stack
   (let [navigation-stack (:navigation-stack db)]
     (fx/merge cofx
               {:db (-> db
@@ -315,8 +317,8 @@
                        (assoc-in [:hardwallet :pin :status] nil)
                        (assoc-in [:hardwallet :pin :login] []))}
               (if (empty? navigation-stack)
-                (navigation/navigate-to-cofx :multiaccounts nil)
-                (navigation/navigate-to-cofx :keycard-login-pin nil)))))
+                (navigation/navigate-to-cofx :intro-stack {:screen :multiaccounts})
+                (navigation/navigate-to-cofx :intro-stack {:screen :keycard-login-pin})))))
 
 (fx/defn open-login
   [{:keys [db] :as cofx} key-uid photo-path name public-key]
@@ -336,7 +338,7 @@
 (fx/defn open-login-callback
   {:events [:multiaccounts.login.callback/get-user-password-success]}
   [{:keys [db] :as cofx} password]
-  (let [key-uid (get-in db [:multiaccounts/login :key-uid])
+  (let [key-uid          (get-in db [:multiaccounts/login :key-uid])
         keycard-account? (boolean (get-in db [:multiaccounts/multiaccounts
                                               key-uid
                                               :keycard-pairing]))]
@@ -346,15 +348,15 @@
        {:db (update-in db [:multiaccounts/login] assoc
                        :password password
                        :save-password? true)}
-       (navigation/navigate-to-cofx :progress nil)
+       (navigation/navigate-to-cofx :intro-stack {:screen :progress})
        login)
       (fx/merge
        cofx
        (when keycard-account?
          {:db (assoc-in db [:hardwallet :pin :enter-step] :login)})
-       (navigation/navigate-to-cofx
-        (if keycard-account? :keycard-login-pin :login)
-        nil)))))
+       (if keycard-account?
+         (navigation/navigate-to-cofx :intro-stack {:screen :keycard-login-pin})
+         (navigation/navigate-to-cofx :intro-stack {:screen :login}))))))
 
 (fx/defn get-credentials
   [{:keys [db] :as cofx} key-uid]
