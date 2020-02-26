@@ -132,5 +132,5 @@
   (when (can-be-called?)
     (ocall @navigator-ref "dispatch"
            (ocall stack-actions "replace"
-                  #js {:routeName (name route)
-                       :params    (clj->js params)}))))
+                  #js {:name   (name route)
+                       :params (clj->js params)}))))

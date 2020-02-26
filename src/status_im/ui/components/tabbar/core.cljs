@@ -23,11 +23,11 @@
    (when (not= to @last-to-value)
      (reset! last-to-value to)
      (animation/start
-       (animation/timing visible
-                         {:toValue         to
-                          :duration        duration
-                          :easing          (animation/cubic)
-                          :useNativeDriver true})
+      (animation/timing visible
+                        {:toValue         to
+                         :duration        duration
+                         :easing          (animation/cubic)
+                         :useNativeDriver true})
       callback))))
 
 (defn main-tab? [view-id]
@@ -119,27 +119,27 @@
       :reagent-render
       (fn [{:keys [navigate index inset]}]
         (when-not @keyboard-shown?
-         [react/animated-view {:style (tabs.styles/tabs-wrapper @minimized-state inset)}
-          [react/animated-view {:style (tabs.styles/animated-container visible?)}
-           [react/view
-            {:style tabs.styles/tabs-container}
-            [react/view {:style tabs.styles/tabs}
-             (for [[route-index
-                    {:keys [nav-stack accessibility-label count-subscription content]}]
-                   tabs-list-data
+          [react/animated-view {:style (tabs.styles/tabs-wrapper @minimized-state inset)}
+           [react/animated-view {:style (tabs.styles/animated-container visible?)}
+            [react/view
+             {:style tabs.styles/tabs-container}
+             [react/view {:style tabs.styles/tabs}
+              (for [[route-index
+                     {:keys [nav-stack accessibility-label count-subscription content]}]
+                    tabs-list-data
 
-                   :let [{:keys [icon title]} content]]
-               ^{:key nav-stack}
-               [tab
-                {:icon                icon
-                 :label               title
-                 :on-press            #(navigate (name nav-stack))
-                 :accessibility-label accessibility-label
-                 :count-subscription  count-subscription
-                 :active?             (= (str index) (str route-index))
-                 :nav-stack           nav-stack}])]]]
-          [react/view
-           {:style (tabs.styles/ios-titles-cover inset)}]]))})))
+                    :let [{:keys [icon title]} content]]
+                ^{:key nav-stack}
+                [tab
+                 {:icon                icon
+                  :label               title
+                  :on-press            #(navigate (name nav-stack))
+                  :accessibility-label accessibility-label
+                  :count-subscription  count-subscription
+                  :active?             (= (str index) (str route-index))
+                  :nav-stack           nav-stack}])]]]
+           [react/view
+            {:style (tabs.styles/ios-titles-cover inset)}]]))})))
 
 (defn tabbar [props]
   (let [navigate (oget props "navigation" "navigate")

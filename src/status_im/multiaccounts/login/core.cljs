@@ -244,7 +244,6 @@
               (when save-password?
                 (keychain/save-user-password key-uid password))
               (keychain/save-auth-method key-uid (or new-auth-method auth-method))
-              (navigation/navigate-to-cofx :home nil)
               (when platform/desktop?
                 (chat-model/update-dock-badge-label)))))
 
@@ -307,19 +306,6 @@
                 (navigation/navigate-to-cofx :tabs {:screen :chat-stack
                                                     :params {:screen :home}})))))
 
-(fx/defn open-keycard-login
-  [{:keys [db] :as cofx}]
-  ;; TODO: Get rid of navigation-stack
-  (let [navigation-stack (:navigation-stack db)]
-    (fx/merge cofx
-              {:db (-> db
-                       (assoc-in [:hardwallet :pin :enter-step] :login)
-                       (assoc-in [:hardwallet :pin :status] nil)
-                       (assoc-in [:hardwallet :pin :login] []))}
-              (if (empty? navigation-stack)
-                (navigation/navigate-to-cofx :intro-stack {:screen :multiaccounts})
-                (navigation/navigate-to-cofx :intro-stack {:screen :keycard-login-pin})))))
-
 (fx/defn open-login
   [{:keys [db] :as cofx} key-uid photo-path name public-key]
   (fx/merge cofx
@@ -353,7 +339,10 @@
       (fx/merge
        cofx
        (when keycard-account?
-         {:db (assoc-in db [:hardwallet :pin :enter-step] :login)})
+         {:db (-> db
+                  (assoc-in [:hardwallet :pin :enter-step] :login)
+                  (assoc-in [:hardwallet :pin :status] nil)
+                  (assoc-in [:hardwallet :pin :login] []))})
        (if keycard-account?
          (navigation/navigate-to-cofx :intro-stack {:screen :keycard-login-pin})
          (navigation/navigate-to-cofx :intro-stack {:screen :login}))))))
@@ -371,7 +360,7 @@
   "Auth method: nil - not supported, \"none\" - not selected, \"password\", \"biometric\", \"biometric-prepare\""
   {:events [:multiaccounts.login/get-auth-method-success]}
   [{:keys [db] :as cofx} auth-method]
-  (let [key-uid (get-in db [:multiaccounts/login :key-uid])
+  (let [key-uid               (get-in db [:multiaccounts/login :key-uid])
         keycard-multiaccount? (boolean (get-in db [:multiaccounts/multiaccounts key-uid :keycard-pairing]))]
     (log/debug "[login] get-auth-method-success"
                "auth-method" auth-method
@@ -385,9 +374,7 @@
                  (get-credentials % key-uid)
 
                  ;;nil or "none" or "biometric-prepare"
-                 (if keycard-multiaccount?
-                   (open-keycard-login %)
-                   (open-login-callback % nil))))))
+                 (open-login-callback % nil)))))
 
 (fx/defn biometric-auth-done
   {:events [:biometric-auth-done]}
