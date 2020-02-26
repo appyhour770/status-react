@@ -3,8 +3,11 @@
             [status-im.ui.components.status-bar.styles :as styles]
             [status-im.utils.platform :as platform]))
 
+;; TODO: Integrate into navigation
 (defn get-config [view-id]
-  (or (get {:qr-scanner {:type :black}}
+  (or (get {:qr-scanner      {:type :black}
+            :new-chat        {:type :black}
+            :new-public-chat {:type :black}}
            view-id)
       {:type :main}))
 

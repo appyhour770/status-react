@@ -2,12 +2,12 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as re-frame]
             [status-im.ui.screens.profile.tribute-to-talk.views :as tr-to-talk]
-            [status-im.utils.platform :as platform]
             [status-im.ui.screens.add-new.new-public-chat.view :as new-public-chat]
             [status-im.ui.screens.wallet.components.views :as wallet.components]
             [status-im.ui.screens.qr-scanner.views :as qr-scanner]
             [status-im.ui.screens.stickers.views :as stickers]
             [status-im.ui.screens.home.views :as home]
+            [status-im.ui.screens.add-new.new-chat.views :as new-chat]
             [status-im.ui.screens.chat.views :as chat]
             [status-im.ui.screens.keycard.views :as keycard]
             [status-im.ui.screens.wallet.transactions.views :as wallet-transactions]
@@ -43,38 +43,10 @@
      :insets    {:top false}
      :component profile-stack/profile-stack}]])
 
-(defn modals []
-  [modals-stack {:mode                     :modal
-                 :header-mode              :none
-                 :defaultNavigationOptions {:gestureEnabled true}}
-   [{:name      :chat-modal
-     :on-focus  [::chat.loading/load-messages]
-     :component chat/chat-modal}
-    {:name      :stickers-pack-modal
-     :component stickers/pack-modal}
-    {:name      :tribute-learn-more
-     :component tr-to-talk/learn-more}
-    ;; {:name      :wallet-transactions-filter
-    ;;  :component wallet-transactions/filter-history}
-    {:name      :welcome
-     :component home/welcome}
-    {:name      :keycard-welcome
-     :component keycard/welcome}
-    {:name      :new-chat
-     :component tabs}
-    {:name      :new-public-chat
-     :component new-public-chat/new-public-chat}
-    {:name      :contact-code
-     :component wallet.components/contact-code}
-    {:name      :qr-scanner
-     :insets    {:top false}
-     :component qr-scanner/qr-scanner}]])
-
 (defn get-main-component [_]
   (fn []
-    [main-stack (merge {:header-mode :none}
-                       (when platform/ios?
-                         {:mode :modal}))
+    [main-stack (merge {:header-mode :none
+                        :mode        :modal})
      [(if @(re-frame/subscribe [:multiaccount/logged-in?])
         {:name      :tabs
          :insets    {:top false}
@@ -83,6 +55,26 @@
          :insets    {:top    false
                      :bottom true}
          :component intro-login-stack/intro-stack})
-      {:name      :modals
+
+      {:name      :chat-modal
+       :on-focus  [::chat.loading/load-messages]
+       :component chat/chat-modal}
+      {:name      :stickers-pack-modal
+       :component stickers/pack-modal}
+      {:name      :tribute-learn-more
+       :component tr-to-talk/learn-more}
+      {:name      :welcome
+       :component home/welcome}
+      {:name      :keycard-welcome
+       :component keycard/welcome}
+      {:name       :new-chat
+       :transition :presentation-ios
+       :component  new-chat/new-chat}
+      {:name       :new-public-chat
+       :transition :presentation-ios
+       :component  new-public-chat/new-public-chat}
+      {:name      :contact-code
+       :component wallet.components/contact-code}
+      {:name      :qr-scanner
        :insets    {:top false}
-       :component modals}]]))
+       :component qr-scanner/qr-scanner}]]))

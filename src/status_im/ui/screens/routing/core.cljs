@@ -4,6 +4,7 @@
    [status-im.ui.components.react :as react]
    [re-frame.core :as re-frame]
    [taoensso.timbre :as log]
+   [status-im.utils.platform :as platform]
    [oops.core :refer [ocall oget]]
    [status-im.react-native.js-dependencies :as js-dependencies]))
 
@@ -19,6 +20,12 @@
 
 (def add-back-handler-listener (oget js-dependencies/back-handler "addEventListener"))
 (def remove-back-handler-listener (oget js-dependencies/back-handler "removeEventListener"))
+
+(def transition-presets (oget stack "TransitionPresets"))
+
+(def modal-presentation-ios (merge (js->clj (oget transition-presets "ModalPresentationIOS"))
+                                   {:gestureEnabled     true
+                                    :cardOverlayEnabled true}))
 
 ;; TODO: Unify with topbar back icon. Maybe dispatch the same event and move the all logic inside the event.
 (defn handle-on-screen-focus
@@ -52,24 +59,30 @@
    (when (get insets :top true)
      {:padding-top (oget insets-obj "top")})))
 
+(defn presentation-type [{:keys [transition] :as opts}]
+  (if (and platform/ios? (= transition :presentation-ios))
+    (-> opts
+        (update :options merge modal-presentation-ios)
+        (assoc-in [:insets :top] false))
+    opts))
+
 (defn wrap-screen [{:keys [component] :as options}]
-  (merge options
-         {:component
-          (fn [props]
-            (handle-on-screen-focus options)
-            (let [props'   (js->clj props :keywordize-keys true)
-                  focused? (oget props "navigation" "isFocused")]
-              (reagent/as-element
-               [react/safe-area-consumer
-                (fn [insets]
-                  (reagent/as-element
-                   [react/view {:style (wrapped-screen-style options insets)}
-                    [component props' (focused?)]]))])))}))
+  (assoc options :component
+         (fn [props]
+           (handle-on-screen-focus options)
+           (let [props'   (js->clj props :keywordize-keys true)
+                 focused? (oget props "navigation" "isFocused")]
+             (reagent/as-element
+              [react/safe-area-consumer
+               (fn [insets]
+                 (reagent/as-element
+                  [react/view {:style (wrapped-screen-style options insets)}
+                   [component props' (focused?)]]))])))))
 
 (defn- get-screen [navigator]
   (let [screen (reagent/adapt-react-class (oget navigator "Screen"))]
     (fn [props]
-      [screen (wrap-screen props)])))
+      [screen (-> props presentation-type wrap-screen)])))
 
 (defn- get-navigator [nav-object]
   (let [navigator (reagent/adapt-react-class (oget nav-object "Navigator"))

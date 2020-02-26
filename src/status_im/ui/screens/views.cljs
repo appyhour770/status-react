@@ -102,7 +102,8 @@
       :reagent-render
       (fn []
         [react/safe-area-provider
-         [react/view {:flex 1}
+         [react/view {:flex             1
+                      :background-color :black}
           [navigation/navigation-container
            (merge {:ref               (fn [r]
                                         (navigation/set-navigator-ref r))
