@@ -275,9 +275,4 @@
 
 (def safe-area-consumer (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaConsumer")))
 
-;; NOTE: Due to a known bug in android: https://github.com/th3rdwave/react-native-safe-area-context/issues/29
-;; do not use safe area in android
-(def safe-area-view
-  (if platform/ios?
-    (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaView"))
-    view))
+(def safe-area-view (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaView")))

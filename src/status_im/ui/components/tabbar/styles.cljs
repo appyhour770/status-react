@@ -115,8 +115,11 @@
    :right            0
    :left             0})
 
-(defn tabs-wrapper [minimized inset]
-  {:padding-bottom   inset
-   :elevation        8
-   :padding-top      (if minimized 0 tabs-diff)
-   :background-color :white})
+(defn tabs-wrapper [keyboard minimized inset]
+  (merge {:padding-bottom   inset
+          :elevation        8
+          :padding-top      (if minimized 0 tabs-diff)
+          :background-color :white}
+         (when keyboard
+           {:position :absolute
+            :bottom   (- tabs-height)})))
