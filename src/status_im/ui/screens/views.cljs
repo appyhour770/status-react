@@ -73,7 +73,11 @@
 (defn on-state-change [state]
   (let [route-name (get-active-route-name (js->clj state))]
     (tabbar/minimize-bar route-name)
-    ;; NOTE: Both calls are for backward compatibility, should be reworked in future
+
+    ;; NOTE(Ferossgp): Keycard did-load events backward compatibility
+    (re-frame/dispatch [:screens/on-will-focus route-name])
+
+    ;; NOTE(Ferossgp): Both calls are for backward compatibility, should be reworked in future
     (statusbar/set-status-bar route-name)
     (re-frame/dispatch [:set :view-id route-name]))
   (when debug?
