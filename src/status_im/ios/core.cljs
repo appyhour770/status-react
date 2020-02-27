@@ -1,7 +1,6 @@
 (ns status-im.ios.core
   (:require [reagent.core :as reagent]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
-            [oops.core :refer [ocall]]
             status-im.utils.db
             status-im.ui.screens.db
             status-im.ui.screens.events
@@ -39,7 +38,6 @@
                       #(when-not (= 0 @keyboard-height)
                          (dispatch [:set :keyboard-height 0])))
         (.hide react/splash-screen)
-        (ocall rn-dependencies/react-native-screens "enableScreens")
         (.addEventListener react/app-state "change" app-state-change-handler)
         (.addEventListener rn-dependencies/react-native-languages "change" on-languages-change)
         (.addEventListener rn-dependencies/react-native-shake

@@ -1,4 +1,5 @@
 (ns status-im.ui.screens.routing.main
+  (:require-macros [status-im.utils.views :as views])
   (:require [reagent.core :as reagent]
             [re-frame.core :as re-frame]
             [status-im.ui.screens.profile.tribute-to-talk.views :as tr-to-talk]
@@ -43,11 +44,11 @@
      :insets    {:top false}
      :component profile-stack/profile-stack}]])
 
-(defn get-main-component [_]
-  (fn []
+(views/defview get-main-component [_]
+  (views/letsubs [logged-in? [:multiaccount/logged-in?]]
     [main-stack (merge {:header-mode :none
                         :mode        :modal})
-     [(if @(re-frame/subscribe [:multiaccount/logged-in?])
+     [(if logged-in?
         {:name      :tabs
          :insets    {:top false}
          :component tabs}
