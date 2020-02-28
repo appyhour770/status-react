@@ -36,10 +36,14 @@
   (let [{{:multiaccounts/keys [multiaccounts] :as db} :db} cofx]
     (cond
       (empty? multiaccounts)
-      (navigation/navigate-to-cofx cofx :intro-stack {:screen :intro})
+      (navigation/navigate-reset cofx {:index  1
+                                       :routes [{:name :intro-stack}
+                                                {:name :intro}]})
 
       logout?
-      (navigation/navigate-to-cofx cofx :intro-stack {:screen :multiaccounts})
+      (navigation/navigate-reset cofx {:index  1
+                                       :routes [{:name :intro-stack}
+                                                {:name :multiaccounts}]})
 
       :else
       (let [{:keys [key-uid public-key photo-path name]} (first (#(sort-by :last-sign-in > %) (vals multiaccounts)))]

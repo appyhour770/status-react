@@ -15,6 +15,9 @@
 
 (defonce stack (navigation/create-stack))
 
+;; NOTE(Ferossgp): There is a point at init when we do not know if there are
+;; multiaccounts or no, and we show intro - we could show progress at this time
+;; for a better UX
 (views/defview intro-stack []
   (views/letsubs [multiaccounts [:multiaccounts/multiaccounts]]
     [stack {:header-mode :none}
@@ -23,6 +26,8 @@
          :component intro/intro}
         {:name      :multiaccounts
          :component multiaccounts/multiaccounts})
+      {:name      :progress
+       :component progress/progress}
       {:name      :login
        :component login/login}
       ;; {:name :intro-wizard

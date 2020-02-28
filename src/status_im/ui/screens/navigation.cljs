@@ -10,11 +10,6 @@
 
 (defmethod unload-data! :default [db] db)
 
-(defmulti preload-data!
-  (fn [db [_ view-id]] (or view-id (:view-id db))))
-
-(defmethod preload-data! :default [db _] db)
-
 (fx/defn navigate-to-cofx
   [{:keys [db]} go-to-view-id screen-params]
   (let [db      (cond-> (assoc db :view-id go-to-view-id)
@@ -62,7 +57,7 @@
                (re-frame/assoc-coeffect context :db (unload-data! db))))))
 
 (def navigation-interceptors
-  [unload-data-interceptor (re-frame/enrich preload-data!)])
+  [unload-data-interceptor])
 
 (re-frame/reg-fx
  ::navigate-to
@@ -106,7 +101,6 @@
 
 (handlers/register-handler-fx
  :navigate-back
- (re-frame/enrich preload-data!)
  (fn [cofx _]
    (navigate-back cofx)))
 

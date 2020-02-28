@@ -273,6 +273,4 @@
 (def safe-area-provider (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaProvider")))
 (def safe-area-consumer (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaConsumer")))
 
-(def safe-area-consumer (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaConsumer")))
-
 (def safe-area-view (adapt-class (object/get js-dependencies/safe-area-context "SafeAreaView")))

@@ -83,8 +83,8 @@
   (when debug?
     (persist-state! state)))
 
-(defonce main-app-navigator    (routing/get-main-component false))
-(defonce twopane-app-navigator (routing/get-main-component true))
+(defonce main-app-navigator    (partial routing/get-main-component false))
+(defonce twopane-app-navigator (partial routing/get-main-component true))
 
 (defn main []
   (let [two-pane? (reagent/atom (dimensions/fit-two-pane?))]

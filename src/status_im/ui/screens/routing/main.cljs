@@ -9,12 +9,14 @@
             [status-im.ui.screens.stickers.views :as stickers]
             [status-im.ui.screens.home.views :as home]
             [status-im.ui.screens.add-new.new-chat.views :as new-chat]
+            [status-im.ui.screens.add-new.new-chat.events :as new-chat.events]
             [status-im.ui.screens.chat.views :as chat]
             [status-im.ui.screens.keycard.views :as keycard]
             [status-im.ui.screens.wallet.transactions.views :as wallet-transactions]
             [status-im.ui.screens.routing.intro-login-stack :as intro-login-stack]
             [status-im.ui.screens.routing.chat-stack :as chat-stack]
             [status-im.ui.screens.routing.wallet-stack :as wallet-stack]
+            [status-im.ui.screens.wallet.events :as wallet.events]
             [status-im.ui.screens.routing.profile-stack :as profile-stack]
             [status-im.ui.screens.routing.browser-stack :as browser-stack]
             [status-im.chat.models.loading :as chat.loading]
@@ -25,7 +27,7 @@
 (defonce modals-stack (navigation/create-stack))
 (defonce bottom-tabs (navigation/create-bottom-tabs))
 
-;; TODO:  Add two-pane navigator on chat-stack
+;; TODO(Ferossgp):  Add two-pane navigator on chat-stack
 (defn tabs []
   [bottom-tabs {:initial-route-name :chat-stack
                 :lazy               false
@@ -38,6 +40,7 @@
      :insets    {:top false}
      :component browser-stack/browser-stack}
     {:name      :wallet-stack
+     :on-focus  [::wallet.events/wallet-stack]
      :insets    {:top false}
      :component wallet-stack/wallet-stack}
     {:name      :profile-stack
@@ -46,8 +49,8 @@
 
 (views/defview get-main-component [_]
   (views/letsubs [logged-in? [:multiaccount/logged-in?]]
-    [main-stack (merge {:header-mode :none
-                        :mode        :modal})
+    [main-stack {:header-mode :none
+                 :mode        :modal}
      [(if logged-in?
         {:name      :tabs
          :insets    {:top false}
@@ -69,6 +72,7 @@
       {:name      :keycard-welcome
        :component keycard/welcome}
       {:name       :new-chat
+       :on-focus   [::new-chat.events/new-chat-focus]
        :transition :presentation-ios
        :component  new-chat/new-chat}
       {:name       :new-public-chat

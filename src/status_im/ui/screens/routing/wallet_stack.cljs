@@ -9,6 +9,7 @@
             [status-im.ui.screens.wallet.account.views :as wallet.account]
             [status-im.ui.screens.wallet.add-new.views :as add-account]
             [status-im.ui.screens.wallet.account-settings.views :as account-settings]
+            [status-im.ui.screens.wallet.events :as wallet.events]
             [status-im.ui.screens.routing.core :as navigation]))
 
 (defonce stack (navigation/create-stack))
@@ -21,6 +22,7 @@
     {:name      :wallet-account
      :component wallet.account/account}
     {:name      :add-new-account
+     :on-focus  [::wallet.events/add-new-account]
      :component add-account/add-account}
     {:name      :add-new-account-pin
      :component add-account/pin}
@@ -28,18 +30,14 @@
      :component account-settings/account-settings}
     {:name      :collectibles-list
      :component collectibles/collectibles-list}
-    ;; {:name :wallet-onboarding-setup
-    ;;          :component }
     {:name      :wallet-transaction-details
      :component wallet-transactions/transaction-details}
-    ;; {:name :wallet-settings-hook
-    ;;          :component }
     {:name      :wallet-settings-assets
      :component wallet-settings/manage-assets}
     {:name      :wallet-add-custom-token
+     :on-focus  [::wallet.events/wallet-add-custom-token]
      :component custom-tokens/add-custom-token}
     {:name      :wallet-custom-token-details
      :component custom-tokens/custom-token-details}
-
     {:name      :currency-settings
      :component currency-settings/currency-settings}]])

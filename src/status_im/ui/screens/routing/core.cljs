@@ -27,7 +27,7 @@
                                    {:gestureEnabled     true
                                     :cardOverlayEnabled true}))
 
-;; TODO: Unify with topbar back icon. Maybe dispatch the same event and move the all logic inside the event.
+;; TODO(Ferossgp): Unify with topbar back icon. Maybe dispatch the same event and move the all logic inside the event.
 (defn handle-on-screen-focus
   [{:keys [back-handler on-focus name]}]
   (use-focus-effect
@@ -48,11 +48,6 @@
 (defn wrapped-screen-style [{:keys [insets]} insets-obj]
   (merge
    {:background-color :white
-    :position         :absolute
-    :left             0
-    :right            0
-    :top              0
-    :bottom           0
     :flex             1}
    (when (get insets :bottom)
      {:padding-bottom (oget insets-obj "bottom")})
