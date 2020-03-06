@@ -9,7 +9,7 @@
             [status-im.i18n :as i18n]
             [re-frame.core :as re-frame]
             [status-im.react-native.resources :as resources]
-            [status-im.ui.components.common.common :as components.common]
+            [status-im.ui.components.button :as button]
             [status-im.ui.components.styles :as components.styles]
             [status-im.ui.components.text-input.view :as text-input]
             [status-im.ui.components.tooltip.views :as tooltip]
@@ -215,9 +215,9 @@
                     :height          86}
         [react/view components.styles/flex]
         [react/view {:margin-right 20}
-         [components.common/bottom-button
+         [button/button
           {:on-press #(re-frame/dispatch [:keycard.onboarding.puk-code.ui/next-pressed])
-           :forward? true}]]]]]]))
+           :type :next}]]]]]]))
 
 (defn preparing []
   (views/loading :t/keycard-onboarding-preparing-header))
@@ -336,10 +336,10 @@
                    :height          86}
        [react/view components.styles/flex]
        [react/view {:margin-right 20}
-        [components.common/bottom-button
+        [button/button
          {:on-press #(re-frame/dispatch [:keycard.onboarding.recovery-phrase.ui/next-pressed])
-          :label    (i18n/label :t/confirm)
-          :forward? true}]]]]]))
+          :label    :t/confirm
+          :type     :next}]]]]]))
 
 (defview recovery-phrase-confirm-word []
   (letsubs [word [:hardwallet-recovery-phrase-word]
@@ -393,13 +393,13 @@
                      :width           "100%"
                      :height          86}
          [react/view {:margin-left 20}
-          [components.common/bottom-button
+          [button/button
            {:on-press #(re-frame/dispatch [:keycard.onboarding.recovery-phrase-confirm-word.ui/back-pressed])
-            :back?    true
-            :label    (i18n/label :t/back)}]]
+            :type     :back
+            :label    :t/back}]]
          [react/view {:margin-right 20}
-          [components.common/bottom-button
+          [button/button
            {:on-press  #(re-frame/dispatch [:keycard.onboarding.recovery-phrase-confirm-word.ui/next-pressed])
-            :label     (i18n/label :t/next)
+            :label     :t/next
             :disabled? (empty? input-word)
-            :forward?  true}]]]]])))
+            :type      :next}]]]]])))
