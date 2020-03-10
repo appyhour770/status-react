@@ -16,7 +16,7 @@
             [status-im.ui.components.animation :as animation]
             [status-im.constants :as constants]
             [status-im.ui.components.colors :as colors]
-            [ status-im.ui.components.button.animated :as animated.button]
+            [status-im.ui.components.button.animated :as animated.button]
             [status-im.ui.screens.add-new.new-public-chat.view :as new-public-chat]
             [status-im.ui.components.button :as button]
             [status-im.ui.components.search-input.view :as search-input]

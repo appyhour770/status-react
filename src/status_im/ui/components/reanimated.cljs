@@ -111,12 +111,10 @@
 (def long-press-gesture-handler (reagent/adapt-react-class (oget js-deps/react-native-gesture-handler "LongPressGestureHandler")))
 (def pure-native-button (oget js-deps/react-native-gesture-handler "PureNativeButton"))
 (def createNativeWrapper (oget js-deps/react-native-gesture-handler "createNativeWrapper"))
-
+(def touchable-without-feedback (oget js-deps/react-native-gesture-handler "TouchableWithoutFeedback"))
 (def animated-raw-button (reagent/adapt-react-class
                           (createNativeWrapper
-                           (createAnimatedComponent pure-native-button)
-                           #js {:shouldActivateOnStart   true
-                                :shouldCancelWhenOutside true})))
+                           (createAnimatedComponent  touchable-without-feedback))))
 
 (def state (oget js-deps/react-native-gesture-handler "State"))
 
