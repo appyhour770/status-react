@@ -81,12 +81,12 @@
          [vector-icons/icon icon (tabs.styles/icon active?)]
          (when count
            (cond
-             (or (pos? @count) (pos? (:other @count)))
+             (or (pos? count) (pos? (:other count)))
              [react/view {:style (if (= nav-stack :chat-stack)
                                    tabs.styles/message-counter
                                    tabs.styles/counter)}
-              [badge/message-counter (or (:other @count) @count) true]]
-             (pos? (:public @count))
+              [badge/message-counter (or (:other count) count) true]]
+             (pos? (:public count))
              [react/view {:style tabs.styles/counter-public-container}
               [react/view {:style tabs.styles/counter-public
                            :accessibility-label :public-unread-badge}]]))]

@@ -17,8 +17,3 @@
  ::wallet-add-custom-token
  (fn [{:keys [db]}]
    {:db (dissoc db :wallet/custom-token-screen)}))
-
-(handlers/register-handler-fx
- ::add-new-account
- (fn [{:keys [db]}]
-   {:db (dissoc db :add-account)}))

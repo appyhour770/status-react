@@ -22,7 +22,6 @@
     {:name      :wallet-account
      :component wallet.account/account}
     {:name      :add-new-account
-     :on-focus  [::wallet.events/add-new-account]
      :component add-account/add-account}
     {:name      :add-new-account-pin
      :component add-account/pin}
