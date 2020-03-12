@@ -40,3 +40,5 @@
 (def desktop-config         #js {:addEventListener (fn [])})
 (def desktop-shortcuts      #js {:addEventListener (fn [])})
 (def safe-area-context      (js/require "react-native-safe-area-context"))
+
+(def react-native-iap (js/require "react-native-iap"))

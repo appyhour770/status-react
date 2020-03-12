@@ -10,8 +10,10 @@
 
 (defn starter-pack []
   (fn []
-    (let [starter-pack-state (re-frame/subscribe [::sp/starter-pack-state])]
-      (when (= :visible @starter-pack-state)
+    (let [starter-pack-state (re-frame/subscribe [::sp/starter-pack-state])
+          can-pay            (re-frame/subscribe [::payment/can-make-payment])]
+      (when (and (= :visible @starter-pack-state)
+                 @can-pay)
         [react/view {:style {:padding             8
                              :background-color    "#ECEFFC"
                              :border-top-width    1
