@@ -10,9 +10,7 @@
             [status-im.ui.screens.home.views :as home]
             [status-im.ui.screens.add-new.new-chat.views :as new-chat]
             [status-im.ui.screens.add-new.new-chat.events :as new-chat.events]
-            [status-im.ui.screens.chat.views :as chat]
-            [status-im.ui.screens.keycard.views :as keycard]
-            [status-im.ui.screens.wallet.transactions.views :as wallet-transactions]
+            [status-im.ui.screens.progress.views :as progress]
             [status-im.ui.screens.routing.intro-login-stack :as intro-login-stack]
             [status-im.ui.screens.routing.chat-stack :as chat-stack]
             [status-im.ui.screens.routing.wallet-stack :as wallet-stack]
@@ -20,6 +18,7 @@
             [status-im.ui.screens.routing.profile-stack :as profile-stack]
             [status-im.ui.screens.routing.browser-stack :as browser-stack]
             [status-im.chat.models.loading :as chat.loading]
+            [status-im.ui.screens.progress.views :as progress]
             [status-im.ui.components.tabbar.core :as tabbar]
             [status-im.ui.screens.routing.core :as navigation]))
 
@@ -48,29 +47,31 @@
      :component profile-stack/profile-stack}]])
 
 (views/defview get-main-component [_]
-  (views/letsubs [logged-in? [:multiaccount/logged-in?]]
+  (views/letsubs [logged-in? [:multiaccount/logged-in?]
+                  loading [:multiaccounts/loading]]
     [main-stack {:header-mode :none
                  :mode        :modal}
-     [(if logged-in?
+     [(cond
+        loading
+        {:name      :progress-start
+         :component progress/progress}
+
+        logged-in?
         {:name      :tabs
          :insets    {:top false}
          :component tabs}
+
+        :else
         {:name      :intro-stack
          :insets    {:top    false
                      :bottom true}
          :component intro-login-stack/intro-stack})
-
-      {:name      :chat-modal
-       :on-focus  [::chat.loading/load-messages]
-       :component chat/chat-modal}
       {:name      :stickers-pack-modal
        :component stickers/pack-modal}
       {:name      :tribute-learn-more
        :component tr-to-talk/learn-more}
       {:name      :welcome
        :component home/welcome}
-      {:name      :keycard-welcome
-       :component keycard/welcome}
       {:name       :new-chat
        :on-focus   [::new-chat.events/new-chat-focus]
        :transition :presentation-ios

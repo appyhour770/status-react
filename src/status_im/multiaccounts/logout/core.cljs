@@ -9,7 +9,9 @@
             [status-im.ui.screens.navigation :as navigation]
             [status-im.utils.keychain.core :as keychain]))
 
-(fx/defn logout-method [{:keys [db] :as cofx} {:keys [auth-method logout?]}]
+(fx/defn logout-method
+  {:events [:multiaccounts.logout.ui/logout-confirmed]}
+  [{:keys [db] :as cofx} {:keys [auth-method logout?]}]
   (let [key-uid (get-in db [:multiaccount :key-uid])]
     (fx/merge cofx
               {::logout                      nil
@@ -26,7 +28,9 @@
   (logout-method cofx {:auth-method keychain/auth-method-none
                        :logout?     true}))
 
-(fx/defn show-logout-confirmation [_]
+(fx/defn show-logout-confirmation
+  {:events [:multiaccounts.logout.ui/logout-pressed]}
+  [_]
   {:ui/show-confirmation
    {:title               (i18n/label :t/logout-title)
     :content             (i18n/label :t/logout-are-you-sure)

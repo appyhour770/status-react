@@ -30,11 +30,6 @@
        :component progress/progress}
       {:name      :login
        :component login/login}
-      ;; {:name :intro-wizard
-      ;;          :component }
-      ;; {:name :create-multiaccount
-      ;;          :component }
-
       {:name      :create-multiaccount-generate-key
        :options   {:stackPresentation "modal"}
        :component intro/wizard-generate-key}
@@ -57,19 +52,10 @@
        :component intro/wizard-confirm-code}
       {:name      :recover-multiaccount-success
        :component intro/wizard-recovery-success}
-      {:name         :keycard-pairing
-       :back-handler :noop
-       :component    keycard/pairing}
       {:name      :keycard-onboarding-intro
        :component keycard.onboarding/intro}
-      {:name      :keycard-onboarding-start
-       :component keycard.onboarding/start}
       {:name      :keycard-onboarding-puk-code
        :component keycard.onboarding/puk-code}
-      {:name      :keycard-onboarding-preparing
-       :component keycard.onboarding/preparing}
-      {:name      :keycard-onboarding-finishing
-       :component keycard.onboarding/finishing}
       {:name      :keycard-onboarding-pin
        :component keycard.onboarding/pin}
       {:name      :keycard-onboarding-recovery-phrase
@@ -80,12 +66,8 @@
        :component keycard.onboarding/recovery-phrase-confirm-word}
       {:name      :keycard-recovery-intro
        :component keycard.recovery/intro}
-      {:name      :keycard-recovery-start
-       :component keycard.recovery/start}
       {:name      :keycard-recovery-pair
        :component keycard.recovery/pair}
-      {:name      :keycard-recovery-recovering
-       :component keycard.recovery/recovering}
       {:name      :keycard-recovery-success
        :component keycard.recovery/success}
       {:name      :keycard-recovery-no-key

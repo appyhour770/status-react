@@ -119,7 +119,7 @@
             {:db (update db :hardwallet dissoc
                          :multiaccount-wallet-address
                          :multiaccount-whisper-public-key)}
-            (navigation/navigate-replace :welcome nil)))
+            (navigation/navigate-to-cofx :welcome nil)))
 
 (fx/defn recovery-no-key
   {:events [:keycard.recovery.no-key.ui/generate-key-pressed]}
@@ -185,8 +185,8 @@
                  encryption-public-key
                  {})
                 (if (= flow :import)
-                  (navigation/navigate-replace :keycard-recovery-success nil)
-                  (navigation/navigate-replace :welcome nil))))))
+                  (navigation/navigate-replace-cofx :keycard-recovery-success nil)
+                  (navigation/navigate-to-cofx :welcome nil))))))
 
 (fx/defn on-generate-and-load-key-success
   {:events       [:hardwallet.callback/on-generate-and-load-key-success]

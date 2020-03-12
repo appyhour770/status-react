@@ -190,6 +190,8 @@
 
 (reg-root-key-sub :auth-method :auth-method)
 
+(reg-root-key-sub :multiaccounts/loading :multiaccounts/loading)
+
 ;;GENERAL ==============================================================================================================
 
 (re-frame/reg-sub

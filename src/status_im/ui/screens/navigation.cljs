@@ -30,20 +30,6 @@
     {:db                db
      ::navigate-replace [go-to-view-id screen-params]}))
 
-(fx/defn navigate-replace-cofx
-  [{:keys [db]} go-to-view-id screen-params]
-  (let [view-id (:view-id db)
-        db      (cond-> (assoc db :view-id go-to-view-id)
-                  (seq screen-params)
-                  (assoc-in [:navigation/screen-params go-to-view-id]
-                            screen-params))]
-    {:db           (if (= view-id go-to-view-id)
-                     db
-                     (-> db
-                         (update :navigation-stack conj go-to-view-id)
-                         (assoc :view-id go-to-view-id)))
-     ::navigate-replace [go-to-view-id screen-params]}))
-
 (fx/defn navigate-reset
   [_ config]
   {::navigate-reset config})

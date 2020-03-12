@@ -97,7 +97,7 @@
 (def common-actions (oget native "CommonActions"))
 (def stack-actions (oget native "StackActions"))
 
-(defonce navigator-ref (atom nil))
+(defonce navigator-ref (reagent/atom nil))
 
 (defn set-navigator-ref [ref]
   (reset! navigator-ref ref))
