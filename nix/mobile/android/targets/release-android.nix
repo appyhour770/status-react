@@ -127,6 +127,19 @@ in stdenv.mkDerivation {
     ${androidEnvShellHook}
     ${concatStrings (catAttrs "shellHook" [ mavenAndNpmDeps.shell status-go.shell ])}
 
+    echo '-------------------------'
+    echo $TMPDIR
+    echo $BUILD_ENV
+    echo '-------------------------'
+    md5sum $KEYSTORE_PATH
+    echo '-------------------------'
+    md5sum ${keystore-file}
+    echo '-------------------------'
+    echo $KEYSTORE_PASSWORD
+    echo $KEYSTORE_ALIAS
+    echo $KEYSTORE_KEY_PASSWORD
+    echo '-------------------------'
+
     pushd $sourceRoot/android
     ${adhocEnvVars} ./gradlew -PversionCode=${assert build-number != ""; build-number} assemble${capitalizedBuildType} || exit
     popd > /dev/null

@@ -46,4 +46,14 @@ else
   )
 fi
 
+echo '-------------------------'
+md5sum $KEYSTORE_PATH
+echo '-------------------------'
+echo $KEYSTORE_PASSWORD
+echo $KEYSTORE_ALIAS
+echo $KEYSTORE_KEY_PASSWORD
+echo '-------------------------'
+
+export KEYSTORE_PASSWORD KEYSTORE_ALIAS KEYSTORE_KEY_PASSWORD
+
 ${GIT_ROOT}/nix/scripts/build.sh targets.mobile.android.release "${nixOpts[@]}"

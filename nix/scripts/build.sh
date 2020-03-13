@@ -59,6 +59,16 @@ if [[ -n "${_NIX_KEEP}" ]]; then
   nixOpts+=("--keep ${_NIX_KEEP//,/ --keep }")
 fi
 
+echo '-------------------------'
+md5sum $KEYSTORE_PATH
+echo '-------------------------'
+echo $KEYSTORE_PASSWORD
+echo $KEYSTORE_ALIAS
+echo $KEYSTORE_KEY_PASSWORD
+echo '-------------------------'
+
+export KEYSTORE_PASSWORD KEYSTORE_ALIAS KEYSTORE_KEY_PASSWORD
+
 # Run the actual build
 echo "Running: nix-build ${nixOpts[@]} default.nix"
 nixResultPath=$(nix-build ${nixOpts[@]} default.nix)
