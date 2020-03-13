@@ -20,8 +20,6 @@
     {:name      :chat
      :on-focus  [::chat.loading/load-messages]
      :component chat/chat}
-    {:name      :select-chat
-     :component chat/select-chat}
     {:name      :profile
      :component profile.contact/profile}
     {:name      :new-group
