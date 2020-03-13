@@ -18,7 +18,6 @@
             [status-im.ui.screens.routing.profile-stack :as profile-stack]
             [status-im.ui.screens.routing.browser-stack :as browser-stack]
             [status-im.chat.models.loading :as chat.loading]
-            [status-im.ui.screens.progress.views :as progress]
             [status-im.ui.components.tabbar.core :as tabbar]
             [status-im.ui.screens.routing.core :as navigation]))
 

@@ -16,7 +16,7 @@
           :header-mode        :none}
    [{:name      :home
      :on-focus  [::chat.loading/offload-all-messages]
-     :component home/home-wrapper}
+     :component home/home}
     {:name      :chat
      :on-focus  [::chat.loading/load-messages]
      :component chat/chat}
