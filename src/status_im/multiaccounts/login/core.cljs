@@ -188,10 +188,11 @@
         multiaccount (dissoc settings :networks/current-network :networks/networks)
         network-id (str (get-in networks [current-network :config :NetworkId]))]
     (fx/merge cofx
-              (cond-> {:db (assoc db
-                                  :networks/current-network current-network
-                                  :networks/networks networks
-                                  :multiaccount multiaccount)}
+              (cond-> {:db (-> db
+                               (dissoc :multiaccounts/login)
+                               (assoc :networks/current-network current-network
+                                      :networks/networks networks
+                                      :multiaccount multiaccount))}
                 (and platform/android?
                      notifications-enabled?)
                 (assoc ::notifications/enable nil)
@@ -286,7 +287,7 @@
                "recovering?" recovering?)
     (fx/merge cofx
               {:db (-> db
-                       (dissoc :multiaccounts/login :connectivity/ui-status-properties)
+                       (dissoc :connectivity/ui-status-properties)
                        (update :hardwallet dissoc
                                :on-card-read
                                :card-read-in-progress?
